@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <style>
         * {
@@ -64,10 +66,16 @@
             display: none;
         }
 
-        #referees { 
+        #referees {
             display: none;
             flex-direction: column;
             gap: 24px;
+        }
+
+        #ref-choice-screen {
+            display: none;
+            flex-direction: column;
+            gap: 40px;
         }
 
         #main-screen {
@@ -77,12 +85,12 @@
             justify-content: center;
         }
 
-        #create { 
+        #create {
             display: none;
         }
 
         #ref-incorrect-password {
-            display: none;;
+            display: none;
         }
     </style>
 
@@ -94,7 +102,7 @@
 
             <div>
                 <button id="main-judge">Sędziuj zawody</button>
-            </div>            
+            </div>
         </div>
 
         <div id="results" class="container">
@@ -107,6 +115,11 @@
             <h1>LOGO</h1>
         </div>
 
+        <div id="ref-choice-screen">
+            <div style="background-color: white;" id="ref-choice-ok">GOOD LIFT</div>
+            <div style="background-color: red;" id="ref-choice-fail">NO LIFT</div>
+        </div>
+
         <div id="referees">
             <h2>Sędzia</h2>
             <div>
@@ -115,7 +128,7 @@
                     <input id="ref-name" type="text">
                 </label>
             </div>
-            
+
             <div>
                 <label>
                     Hasło<br>
@@ -126,17 +139,17 @@
             <div class="radio-btns">
                 <label>
                     Lewy
-                    <input id="ch-1" type="radio" name="ref-choice" value="left">
+                    <input id="ch-1" type="radio" name="ref-choice" value="lewy">
                 </label>
 
                 <label>
                     Środkowy
-                    <input id="ch-2"  type="radio" name="ref-choice" value="center">
+                    <input id="ch-2" type="radio" name="ref-choice" value="środkowy">
                 </label>
 
                 <label>
                     Prawy
-                    <input id="ch-3"  type="radio" name="ref-choice" value="right">
+                    <input id="ch-3" type="radio" name="ref-choice" value="prawy">
                 </label>
             </div>
 
@@ -146,14 +159,14 @@
             </div>
         </div>
 
-        <div id="create" class="create" >
+        <div id="create" class="create">
             <div>
                 <label>
                     Nazwa zawodów<br>
                     <input id="create-name" type="text">
                 </label>
             </div>
-            
+
             <div>
                 <label>
                     Hasło<br>
@@ -168,7 +181,7 @@
 
         </div>
     </div>
-    
+
 
 
 
@@ -179,7 +192,7 @@
         const mainScreen = document.getElementById('main-screen');
         const mainCreateBtn = document.getElementById('main-create');
         const mainJudgeBtn = document.getElementById('main-judge');
-        
+
         const waitingScreen = document.getElementById('waiting-screen');
 
         const createScreen = document.getElementById('create');
@@ -187,6 +200,11 @@
         const createNameInput = document.getElementById('create-name');
         const createPasswordInput = document.getElementById('create-password');
         const createIncorrectPassword = document.getElementById('create-incorrect-password');
+
+        const refChoiceScreen = document.getElementById('ref-choice-screen');
+        const refChoiceOk = document.getElementById('ref-choice-ok');
+        const refChoiceFail = document.getElementById('ref-choice-fail');
+
 
         const refereesScreen = document.getElementById('referees');
         const refereesConfirmBtn = document.getElementById('ref-confirm');
@@ -196,6 +214,7 @@
         const refereesCh1 = document.getElementById('ch-1');
         const refereesCh2 = document.getElementById('ch-2');
         const refereesCh3 = document.getElementById('ch-3');
+        const refereesRadio = [refereesCh1, refereesCh2, refereesCh3]
 
         exampleSocket.onopen = (event) => {
             createConfirmBtn.disabled = false;
@@ -204,14 +223,22 @@
 
         exampleSocket.onmessage = (msg) => {
             const msgJson = JSON.parse(msg.data);
-            if(msgJson.type === 'createResult') {
-                console.log(msgJson);
-                if(msgJson.data === 'incorrect password') {
+            console.log(msgJson);
+            if (msgJson.type === 'createResult') {
+                if (msgJson.data === 'incorrect password') {
                     createIncorrectPassword.style = "display: block";
                 } else {
                     showWaitingScreen();
                 }
-                
+
+            } else if (msgJson.type === 'joinResult') {
+                if (msgJson.data === 'pozycja już zajęta' || msgJson.data === 'nieprawidłowe hasło' || msgJson
+                    .data === 'Zawody nie istnieją') {
+                    refereesIncorrectPassword.innerText = msgJson.data;
+                    refereesIncorrectPassword.style = 'display: inline'
+                } else {
+                    showRefChoiceScreen();
+                }
             }
         }
 
@@ -220,12 +247,23 @@
             createScreen.style = "display: none";
         }
 
-        
+        function showRefChoiceScreen() {
+            refereesScreen.style = "display:none";
+            refChoiceScreen.style = "display:flex";
+        }
+
+
 
         createConfirmBtn.onclick = (event) => {
             console.log('clicked', createNameInput.value, createPasswordInput.value);
-            const createData = { name: createNameInput.value, password: createPasswordInput.value };
-            exampleSocket.send(JSON.stringify({type: 'create', data: createData}))
+            const createData = {
+                name: createNameInput.value,
+                password: createPasswordInput.value
+            };
+            exampleSocket.send(JSON.stringify({
+                type: 'create',
+                data: createData
+            }))
         }
 
         mainCreateBtn.onclick = () => {
@@ -240,9 +278,20 @@
         }
 
         refereesConfirmBtn.onclick = () => {
-
+            const selectedRef = refereesRadio.find((radio) => radio.checked)
+            if (!selectedRef) {
+                return;
+            }
+            exampleSocket.send(JSON.stringify({
+                type: 'ref join',
+                data: {
+                    refereePosition: selectedRef.value,
+                    name: refereesNameInput.value,
+                    password: refereesPasswordInput.value
+                }
+            }))
         }
-        
     </script>
 </body>
+
 </html>
