@@ -53,6 +53,13 @@
             flex-direction: column;
         }
 
+        .center-v-h {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+        }
+
         #results {
             display: none;
         }
@@ -75,7 +82,7 @@
         #ref-choice-screen {
             display: none;
             flex-direction: column;
-            gap: 40px;
+            gap: 10vh;
         }
 
         #main-screen {
@@ -116,8 +123,8 @@
         </div>
 
         <div id="ref-choice-screen">
-            <div style="background-color: white;" id="ref-choice-ok">GOOD LIFT</div>
-            <div style="background-color: red;" id="ref-choice-fail">NO LIFT</div>
+            <div class="center-v-h" style="background-color: white; height: 35vh; width: 35vw;" id="ref-choice-ok"><span>GOOD LIFT</span></div>
+            <div class="center-v-h" style="background-color: red;  height: 35vh; width: 35vw;" id="ref-choice-fail"><span>NO LIFT</span></div>
         </div>
 
         <div id="referees">
