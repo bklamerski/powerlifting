@@ -7,15 +7,145 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>test</h1>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            flex: 1 0 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 8%;
+            background-color: black;
+            height: 100%;
+        }
+
+        .result {
+            width: 20vw;
+            height: 80vh;
+
+            background-color: wheat;
+        }
+
+        .create {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        #results {
+            display: none;
+        }
+
+        #waiting-screen {
+            display: none;
+        }
+
+        #create-incorrect-password {
+            color: lightcoral;
+            display: none;
+        }
+
+        #referees { 
+            display: none;
+        }
+    </style>
+
+    <div class="container">
+        <div id="results" class="container">
+            <div class="result"></div>
+            <div class="result"></div>
+            <div class="result"></div>
+        </div>
+
+        <div id="waiting-screen">
+            <h1>LOGO</h1>
+        </div>
+
+        <div id="referees"></div>
+
+        <div id="create" class="create" >
+            <div>
+                <label>
+                    Nazwa zawodów<br>
+                    <input id="create-name" type="text">
+                </label>
+            </div>
+            
+            <div>
+                <label>
+                    Hasło<br>
+                    <input id="create-password" type="password">
+                </label>
+            </div>
+
+            <div style="text-align: center">
+                <span id="create-incorrect-password">Nieprawidłowe hasło</span><br>
+                <button id="create-confirm" disabled="true">Utwórz</button>
+            </div>
+            
+
+                
+            
+        </div>
+    </div>
+    
+
+
+
     <script>
         const host = location.origin.replace(/^http/, 'ws');
         const exampleSocket = new WebSocket(host);
 
+        const waitingScreen = document.getElementById('waiting-screen');
+
+        const createScreen = document.getElementById('create');
+        const createConfirmBtn = document.getElementById('create-confirm');
+        const createNameInput = document.getElementById('create-name');
+        const createPasswordInput = document.getElementById('create-password');
+        const createIncorrectPassword = document.getElementById('create-incorrect-password');
+
         exampleSocket.onopen = (event) => {
-            exampleSocket.send("test");
-            console.log('test')
+            createConfirmBtn.disabled = false;
         };
+
+        exampleSocket.onmessage = (msg) => {
+            const msgJson = JSON.parse(msg.data);
+            if(msgJson.type === 'createResult') {
+                console.log(msgJson);
+                if(msgJson.data === 'incorrect password') {
+                    createIncorrectPassword.style = "display: block";
+                } else {
+                    showWaitingScreen();
+                }
+                
+            }
+        }
+
+        function showWaitingScreen() {
+            waitingScreen.style = "display: block";
+            createScreen.style = "display: none";
+        }
+
+        
+
+        createConfirmBtn.onclick = (event) => {
+            console.log('clicked', createNameInput.value, createPasswordInput.value);
+            const createData = { name: createNameInput.value, password: createPasswordInput.value };
+            exampleSocket.send(JSON.stringify({type: 'create', data: createData}))
+        }
         
     </script>
 </body>
