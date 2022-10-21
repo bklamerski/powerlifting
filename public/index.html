@@ -123,6 +123,7 @@
         </div>
 
         <div id="ref-choice-screen">
+            <h1 style="text-align: center" id="ref-position-display"></h1>
             <div class="center-v-h" style="background-color: white; height: 35vh; width: 35vw;" id="ref-choice-ok"><span>GOOD LIFT</span></div>
             <div class="center-v-h" style="background-color: red;  height: 35vh; width: 35vw;" id="ref-choice-fail"><span>NO LIFT</span></div>
         </div>
@@ -211,7 +212,7 @@
         const refChoiceScreen = document.getElementById('ref-choice-screen');
         const refChoiceOk = document.getElementById('ref-choice-ok');
         const refChoiceFail = document.getElementById('ref-choice-fail');
-
+        const refPositionDisplay = document.getElementById('ref-position-display');
 
         const refereesScreen = document.getElementById('referees');
         const refereesConfirmBtn = document.getElementById('ref-confirm');
@@ -245,6 +246,7 @@
                     refereesIncorrectPassword.style = 'display: inline'
                 } else {
                     showRefChoiceScreen();
+                    refPositionDisplay.innerText = msgJson.data;
                 }
             }
         }
