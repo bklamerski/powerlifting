@@ -22,6 +22,9 @@ function createRoom(roomData, ownerWs) {
     ownerWs,
     votes: [],
   });
+  setTimeout(() => {
+    rooms.delete(roomData.name);
+  }, 3600 * 1000 * 12);
   return {
     type: "createResult",
     data: { result: "room created", name: roomData.name },
