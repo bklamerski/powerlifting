@@ -1,306 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
+      * {
+        padding: 0;
+        margin: 0;
+      }
 
-        body {
-            width: 100vw;
-            height: 100vh;
-            color: white;
-        }
+      body {
+        width: 100vw;
+        height: 100vh;
+        color: white;
+      }
 
-        .container {
-            display: flex;
-            flex: 1 0 100%;
-            justify-content: center;
-            align-items: center;
-            gap: 8%;
-            background-color: black;
-            height: 100%;
-        }
+      .container {
+        display: flex;
+        flex: 1 0 100%;
+        justify-content: center;
+        align-items: center;
+        gap: 8%;
+        background-color: black;
+        height: 100%;
+      }
 
-        .result {
-            width: 20vw;
-            height: 80vh;
+      .result {
+        width: 20vw;
+        height: 80vh;
 
-            background-color: wheat;
-        }
+        background-color: wheat;
+      }
 
-        .create {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
+      .create {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
 
-        .radio-btns {
-            display: flex;
-            gap: 14px;
-            flex-direction: column;
-        }
+      .radio-btns {
+        display: flex;
+        gap: 14px;
+        flex-direction: column;
+      }
 
-        .center-v-h {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-        }
+      .center-v-h {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+      }
 
-        #results {
-            display: none;
-        }
+      #results {
+        display: none;
+      }
 
-        #waiting-screen {
-            display: none;
-        }
+      #waiting-screen {
+        display: none;
+      }
 
-        #create-incorrect-password {
-            color: lightcoral;
-            display: none;
-        }
+      #create-incorrect-password {
+        color: lightcoral;
+        display: none;
+      }
 
-        #referees {
-            display: none;
-            flex-direction: column;
-            gap: 24px;
-        }
+      #referees {
+        display: none;
+        flex-direction: column;
+        gap: 24px;
+      }
 
-        #ref-choice-screen {
-            display: none;
-            flex-direction: column;
-            gap: 10vh;
-        }
+      #ref-choice-screen {
+        display: none;
+        flex-direction: column;
+        gap: 10vh;
+      }
 
-        #main-screen {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            justify-content: center;
-        }
+      #main-screen {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        justify-content: center;
+      }
 
-        #create {
-            display: none;
-        }
+      #create {
+        display: none;
+      }
 
-        #ref-incorrect-password {
-            display: none;
-        }
+      #ref-incorrect-password {
+        display: none;
+        color: lightcoral;
+      }
     </style>
 
     <div class="container">
-        <div id="main-screen">
-            <div>
-                <button id="main-create">Utwórz zawody</button>
-            </div>
-
-            <div>
-                <button id="main-judge">Sędziuj zawody</button>
-            </div>
+      <div id="main-screen">
+        <div>
+          <button id="main-create">Utwórz zawody</button>
         </div>
 
-        <div id="results" class="container">
-            <div class="result"></div>
-            <div class="result"></div>
-            <div class="result"></div>
+        <div>
+          <button id="main-judge">Sędziuj zawody</button>
+        </div>
+      </div>
+
+      <div id="results" class="container">
+        <div id="result-left" class="result"></div>
+        <div id="result-center" class="result"></div>
+        <div id="result-right" class="result"></div>
+      </div>
+
+      <div id="waiting-screen">
+        <h1>LOGO</h1>
+      </div>
+
+      <div id="ref-choice-screen">
+        <h1 style="text-align: center" id="ref-position-display"></h1>
+        <div
+          class="center-v-h"
+          style="background-color: white; height: 35vh; width: 35vw"
+          id="ref-choice-ok"
+        >
+          <span>GOOD LIFT</span>
+        </div>
+        <div
+          class="center-v-h"
+          style="background-color: red; height: 35vh; width: 35vw"
+          id="ref-choice-fail"
+        >
+          <span>NO LIFT</span>
+        </div>
+      </div>
+
+      <div id="referees">
+        <h2>Sędzia</h2>
+        <div>
+          <label>
+            Nazwa zawodów<br />
+            <input id="ref-name" type="text" />
+          </label>
         </div>
 
-        <div id="waiting-screen">
-            <h1>LOGO</h1>
+        <div>
+          <label>
+            Hasło<br />
+            <input id="ref-password" type="password" />
+          </label>
         </div>
 
-        <div id="ref-choice-screen">
-            <h1 style="text-align: center" id="ref-position-display"></h1>
-            <div class="center-v-h" style="background-color: white; height: 35vh; width: 35vw;" id="ref-choice-ok"><span>GOOD LIFT</span></div>
-            <div class="center-v-h" style="background-color: red;  height: 35vh; width: 35vw;" id="ref-choice-fail"><span>NO LIFT</span></div>
+        <div class="radio-btns">
+          <label>
+            Lewy
+            <input id="ch-1" type="radio" name="ref-choice" value="lewy" />
+          </label>
+
+          <label>
+            Środkowy
+            <input id="ch-2" type="radio" name="ref-choice" value="środkowy" />
+          </label>
+
+          <label>
+            Prawy
+            <input id="ch-3" type="radio" name="ref-choice" value="prawy" />
+          </label>
         </div>
 
-        <div id="referees">
-            <h2>Sędzia</h2>
-            <div>
-                <label>
-                    Nazwa zawodów<br>
-                    <input id="ref-name" type="text">
-                </label>
-            </div>
+        <div style="text-align: center">
+          <span id="ref-incorrect-password">Nieprawidłowe hasło</span><br />
+          <button id="ref-confirm" disabled="true">Utwórz</button>
+        </div>
+      </div>
 
-            <div>
-                <label>
-                    Hasło<br>
-                    <input id="ref-password" type="password">
-                </label>
-            </div>
-
-            <div class="radio-btns">
-                <label>
-                    Lewy
-                    <input id="ch-1" type="radio" name="ref-choice" value="lewy">
-                </label>
-
-                <label>
-                    Środkowy
-                    <input id="ch-2" type="radio" name="ref-choice" value="środkowy">
-                </label>
-
-                <label>
-                    Prawy
-                    <input id="ch-3" type="radio" name="ref-choice" value="prawy">
-                </label>
-            </div>
-
-            <div style="text-align: center">
-                <span id="ref-incorrect-password">Nieprawidłowe hasło</span><br>
-                <button id="ref-confirm" disabled="true">Utwórz</button>
-            </div>
+      <div id="create" class="create">
+        <div>
+          <label>
+            Nazwa zawodów<br />
+            <input id="create-name" type="text" />
+          </label>
         </div>
 
-        <div id="create" class="create">
-            <div>
-                <label>
-                    Nazwa zawodów<br>
-                    <input id="create-name" type="text">
-                </label>
-            </div>
-
-            <div>
-                <label>
-                    Hasło<br>
-                    <input id="create-password" type="password">
-                </label>
-            </div>
-
-            <div style="text-align: center">
-                <span id="create-incorrect-password">Nieprawidłowe hasło</span><br>
-                <button id="create-confirm" disabled="true">Utwórz</button>
-            </div>
-
+        <div>
+          <label>
+            Hasło<br />
+            <input id="create-password" type="password" />
+          </label>
         </div>
+
+        <div style="text-align: center">
+          <span id="create-incorrect-password">Nieprawidłowe hasło</span><br />
+          <button id="create-confirm" disabled="true">Utwórz</button>
+        </div>
+      </div>
     </div>
 
-
-
-
     <script>
-        const host = location.origin.replace(/^http/, 'ws');
-        const exampleSocket = new WebSocket(host);
+      const host = location.origin.replace(/^http/, "ws");
+      const exampleSocket = new WebSocket(host);
 
-        const mainScreen = document.getElementById('main-screen');
-        const mainCreateBtn = document.getElementById('main-create');
-        const mainJudgeBtn = document.getElementById('main-judge');
+      let refPosition;
+      let selectedContestName;
+      let isOwner = false;
 
-        const waitingScreen = document.getElementById('waiting-screen');
+      const mainScreen = document.getElementById("main-screen");
+      const mainCreateBtn = document.getElementById("main-create");
+      const mainJudgeBtn = document.getElementById("main-judge");
 
-        const createScreen = document.getElementById('create');
-        const createConfirmBtn = document.getElementById('create-confirm');
-        const createNameInput = document.getElementById('create-name');
-        const createPasswordInput = document.getElementById('create-password');
-        const createIncorrectPassword = document.getElementById('create-incorrect-password');
+      const waitingScreen = document.getElementById("waiting-screen");
 
-        const refChoiceScreen = document.getElementById('ref-choice-screen');
-        const refChoiceOk = document.getElementById('ref-choice-ok');
-        const refChoiceFail = document.getElementById('ref-choice-fail');
-        const refPositionDisplay = document.getElementById('ref-position-display');
+      const resultsScreen = document.getElementById("results");
+      const resultLeftScreen = document.getElementById("result-left");
+      const resultCenterScreen = document.getElementById("result-center");
+      const resultRightScreen = document.getElementById("result-right");
 
-        const refereesScreen = document.getElementById('referees');
-        const refereesConfirmBtn = document.getElementById('ref-confirm');
-        const refereesNameInput = document.getElementById('ref-name');
-        const refereesPasswordInput = document.getElementById('ref-password');
-        const refereesIncorrectPassword = document.getElementById('ref-incorrect-password');
-        const refereesCh1 = document.getElementById('ch-1');
-        const refereesCh2 = document.getElementById('ch-2');
-        const refereesCh3 = document.getElementById('ch-3');
-        const refereesRadio = [refereesCh1, refereesCh2, refereesCh3]
+      const createScreen = document.getElementById("create");
+      const createConfirmBtn = document.getElementById("create-confirm");
+      const createNameInput = document.getElementById("create-name");
+      const createPasswordInput = document.getElementById("create-password");
+      const createIncorrectPassword = document.getElementById(
+        "create-incorrect-password"
+      );
 
-        exampleSocket.onopen = (event) => {
-            createConfirmBtn.disabled = false;
-            refereesConfirmBtn.disabled = false;
+      const refChoiceScreen = document.getElementById("ref-choice-screen");
+      const refChoiceOk = document.getElementById("ref-choice-ok");
+      const refChoiceFail = document.getElementById("ref-choice-fail");
+      const refPositionDisplay = document.getElementById(
+        "ref-position-display"
+      );
+
+      const refereesScreen = document.getElementById("referees");
+      const refereesConfirmBtn = document.getElementById("ref-confirm");
+      const refereesNameInput = document.getElementById("ref-name");
+      const refereesPasswordInput = document.getElementById("ref-password");
+      const refereesIncorrectPassword = document.getElementById(
+        "ref-incorrect-password"
+      );
+      const refereesCh1 = document.getElementById("ch-1");
+      const refereesCh2 = document.getElementById("ch-2");
+      const refereesCh3 = document.getElementById("ch-3");
+      const refereesRadio = [refereesCh1, refereesCh2, refereesCh3];
+
+      exampleSocket.onopen = (event) => {
+        createConfirmBtn.disabled = false;
+        refereesConfirmBtn.disabled = false;
+      };
+
+      exampleSocket.onmessage = (msg) => {
+        const msgJson = JSON.parse(msg.data);
+        console.log(msgJson);
+        if (msgJson.type === "createResult") {
+          if (msgJson.data === "incorrect password") {
+            createIncorrectPassword.style = "display: block";
+          } else {
+            showWaitingScreen();
+          }
+        } else if (msgJson.type === "joinResult") {
+          if (
+            msgJson.data === "pozycja już zajęta" ||
+            msgJson.data === "nieprawidłowe hasło" ||
+            msgJson.data === "Zawody nie istnieją"
+          ) {
+            refereesIncorrectPassword.innerText = msgJson.data;
+            refereesIncorrectPassword.style = "display: inline";
+          } else {
+            showRefChoiceScreen();
+            refPositionDisplay.innerText = msgJson.data;
+            refPosition = msgJson.data;
+          }
+        } else if (msgJson.type === "votingResult") {
+          if (isOwner) {
+            showResultsScreen(msgJson.data);
+          }
+        }
+      };
+
+      function showWaitingScreen() {
+        waitingScreen.style = "display: block";
+        createScreen.style = "display: none";
+      }
+
+      function showRefChoiceScreen() {
+        refereesScreen.style = "display:none";
+        refChoiceScreen.style = "display:flex";
+      }
+
+      function refereeVote(isGood) {
+        exampleSocket.send(
+          JSON.stringify({
+            type: "ref-vote",
+            data: {
+              decision: isGood,
+              position: refPosition,
+              contest: selectedContestName,
+            },
+          })
+        );
+      }
+
+      function showResultsScreen(results) {
+        if (results.length === 3) {
+          const leftRef = results.find((vote) => vote.refPosition === "lewy");
+          const centerRef = results.find(
+            (vote) => vote.refPosition === "środkowy"
+          );
+          const rightRef = results.find((vote) => vote.refPosition === "prawy");
+
+          resultLeftScreen.style = `background-color: ${
+            leftRef.decision ? "green" : "red"
+          }`;
+          resultCenterScreen.style = `background-color: ${
+            centerRef.decision ? "green" : "red"
+          }`;
+          resultRightScreen.style = `background-color: ${
+            rightRef.decision ? "green" : "red"
+          }`;
+
+          waitingScreen.style = "display: none";
+          resultsScreen.style = "display: flex";
+
+          setTimeout(() => {
+            resultLeftScreen.style = "background-color: white";
+            resultCenterScreen.style = "background-color: white";
+            resultRightScreen.style = "background-color: white";
+
+            waitingScreen.style = "display: flex";
+            resultsScreen.style = "display: none";
+          }, 5000);
+        } else {
+          console.warn(
+            "Incorrect size of results, should be 3, received:",
+            results
+          );
+        }
+      }
+
+      createConfirmBtn.onclick = (event) => {
+        console.log(
+          "clicked",
+          createNameInput.value,
+          createPasswordInput.value
+        );
+        const createData = {
+          name: createNameInput.value,
+          password: createPasswordInput.value,
         };
+        isOwner = true;
+        exampleSocket.send(
+          JSON.stringify({
+            type: "create",
+            data: createData,
+          })
+        );
+      };
 
-        exampleSocket.onmessage = (msg) => {
-            const msgJson = JSON.parse(msg.data);
-            console.log(msgJson);
-            if (msgJson.type === 'createResult') {
-                if (msgJson.data === 'incorrect password') {
-                    createIncorrectPassword.style = "display: block";
-                } else {
-                    showWaitingScreen();
-                }
+      mainCreateBtn.onclick = () => {
+        mainScreen.style = "display: none";
+        createScreen.style = "display: flex";
+      };
 
-            } else if (msgJson.type === 'joinResult') {
-                if (msgJson.data === 'pozycja już zajęta' || msgJson.data === 'nieprawidłowe hasło' || msgJson
-                    .data === 'Zawody nie istnieją') {
-                    refereesIncorrectPassword.innerText = msgJson.data;
-                    refereesIncorrectPassword.style = 'display: inline'
-                } else {
-                    showRefChoiceScreen();
-                    refPositionDisplay.innerText = msgJson.data;
-                }
-            }
+      mainJudgeBtn.onclick = () => {
+        mainScreen.style = "display: none";
+        refereesScreen.style = "display: flex";
+      };
+
+      refChoiceOk.onclick = () => {
+        refereeVote(true);
+      };
+
+      refChoiceFail.onclick = () => {
+        refereeVote(false);
+      };
+
+      refereesConfirmBtn.onclick = () => {
+        const selectedRef = refereesRadio.find((radio) => radio.checked);
+        if (!selectedRef) {
+          return;
         }
-
-        function showWaitingScreen() {
-            waitingScreen.style = "display: block";
-            createScreen.style = "display: none";
-        }
-
-        function showRefChoiceScreen() {
-            refereesScreen.style = "display:none";
-            refChoiceScreen.style = "display:flex";
-        }
-
-
-
-        createConfirmBtn.onclick = (event) => {
-            console.log('clicked', createNameInput.value, createPasswordInput.value);
-            const createData = {
-                name: createNameInput.value,
-                password: createPasswordInput.value
-            };
-            exampleSocket.send(JSON.stringify({
-                type: 'create',
-                data: createData
-            }))
-        }
-
-        mainCreateBtn.onclick = () => {
-            mainScreen.style = "display: none";
-            createScreen.style = "display: flex";
-
-        }
-
-        mainJudgeBtn.onclick = () => {
-            mainScreen.style = "display: none";
-            refereesScreen.style = "display: flex";
-        }
-
-        refereesConfirmBtn.onclick = () => {
-            const selectedRef = refereesRadio.find((radio) => radio.checked)
-            if (!selectedRef) {
-                return;
-            }
-            exampleSocket.send(JSON.stringify({
-                type: 'ref join',
-                data: {
-                    refereePosition: selectedRef.value,
-                    name: refereesNameInput.value,
-                    password: refereesPasswordInput.value
-                }
-            }))
-        }
+        selectedContestName = refereesNameInput.value;
+        exampleSocket.send(
+          JSON.stringify({
+            type: "ref join",
+            data: {
+              refereePosition: selectedRef.value,
+              name: refereesNameInput.value,
+              password: refereesPasswordInput.value,
+            },
+          })
+        );
+      };
     </script>
-</body>
-
+  </body>
 </html>
