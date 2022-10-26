@@ -59,6 +59,15 @@
         color: black;
       }
 
+      .waiting-screen {
+        height: 100vh;
+        width: 100vw;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       #results {
         display: none;
       }
@@ -118,8 +127,14 @@
         <div id="result-right" class="result"></div>
       </div>
 
-      <div id="waiting-screen">
-        <h1>LOGO</h1>
+      <div class="waiting-screen" id="waiting-screen">
+        <img
+          src="./logo.png"
+          height="80%"
+          width="80%"
+          alt="Politechnika Łódzka"
+          style="object-fit: contain"
+        />
       </div>
 
       <div id="ref-choice-screen">
@@ -273,6 +288,10 @@
             showRefChoiceScreen();
             refPositionDisplay.innerText = msgJson.data;
             refPosition = msgJson.data;
+            localStorage.setItem(
+              `refPosition:${selectedContestName}`,
+              refPosition
+            );
           }
         } else if (msgJson.type === "votingResult") {
           if (isOwner) {
@@ -282,7 +301,7 @@
       };
 
       function showWaitingScreen() {
-        waitingScreen.style = "display: block";
+        waitingScreen.style = "display: flex";
         createScreen.style = "display: none";
       }
 
@@ -313,13 +332,13 @@
           const rightRef = results.find((vote) => vote.refPosition === "prawy");
 
           resultLeftScreen.style = `background-color: ${
-            leftRef.decision ? "green" : "red"
+            leftRef.decision ? "white" : "red"
           }`;
           resultCenterScreen.style = `background-color: ${
-            centerRef.decision ? "green" : "red"
+            centerRef.decision ? "white" : "red"
           }`;
           resultRightScreen.style = `background-color: ${
-            rightRef.decision ? "green" : "red"
+            rightRef.decision ? "white" : "red"
           }`;
 
           waitingScreen.style = "display: none";
@@ -384,6 +403,10 @@
           return;
         }
         selectedContestName = refereesNameInput.value;
+        const localStoragePosition = localStorage.getItem(
+          `refPosition:${selectedContestName}`
+        );
+        const rejoiningPosition = localStoragePosition ?? null;
         exampleSocket.send(
           JSON.stringify({
             type: "ref join",
@@ -391,6 +414,7 @@
               refereePosition: selectedRef.value,
               name: refereesNameInput.value,
               password: refereesPasswordInput.value,
+              rejoiningPosition: rejoiningPosition,
             },
           })
         );
