@@ -35,10 +35,15 @@ function refereeJoin(data) {
   const room = rooms.get(data.name);
   if (room) {
     if (data.password === room.password) {
-      if (room.refereePositions.includes(data.refereePosition)) {
+      if (
+        room.refereePositions.includes(data.refereePosition) &&
+        data.rejoiningPosition !== data.refereePosition
+      ) {
         return { type: "joinResult", data: "pozycja już zajęta" };
       } else {
-        room.refereePositions.push(data.refereePosition);
+        if (data.rejoiningPosition === null) {
+          room.refereePositions.push(data.refereePosition);
+        }
         return { type: "joinResult", data: data.refereePosition };
       }
     } else {
@@ -67,6 +72,8 @@ function refereeVote(data) {
   }
   return { type: "refVoteResponse", data: "room doesnt exist, vote failed" };
 }
+
+app.use("/", express.static(path.join(__dirname, "public")));
 
 app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname + "/public/index.html"));
